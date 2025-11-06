@@ -11,20 +11,26 @@ import (
 	"syreclabs.com/go/faker"
 )
 
-func TestCreate(t *testing.T) {
+func TestUserCreation(t *testing.T) {
 	t.Run("when created", func(t *testing.T) {
 		lib.SetupEnvironmentVariables()
+
 		userRepository := repositories.InMemoryUserRepository{}
+		whitelistRepository := repositories.InMemoryWhitelistRepository{}
+		cardNumber := faker.Number().Number(7)
+
+		whitelistRepository.Insert(cardNumber)
 
 		payload := dto.UserCreationDTO{
-			CardNumber: faker.Number().Number(7),
+			CardNumber: cardNumber,
 			Name:       faker.Name().Name(),
 			Password:   generators.GeneratePassword(),
 		}
 
 		result, err := Create(UserCreationParams{
-			UserRepository: userRepository,
-			Payload:        payload,
+			UserRepository:      userRepository,
+			WhitelistRepository: whitelistRepository,
+			Payload:             payload,
 		})
 
 		require.NoError(t, err)

@@ -12,6 +12,8 @@ var variableNames = []string{
 	"HTTP_SERVER_ADDR",
 	"JWT_SECRET",
 	"DATABASE_DSN",
+	"REDIS_DSN",
+	"REDIS_PASSWORD",
 }
 
 func SetupEnvironmentVariables() {

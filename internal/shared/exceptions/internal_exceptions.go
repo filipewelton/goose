@@ -11,6 +11,10 @@ type internalExceptions struct {
 	ErrEntityIDGenerationFailed           error
 	ErrPasswordHashingFailed              error
 	ErrJWTGenerationFailed                error
+	ErrRedisConnectionFailure             error
+	ErrRedisDisconnectionFailure          error
+	ErrRedisInsertionFailed               error
+	ErrRedisDeletionFailed                error
 }
 
 var InternalExceptions = internalExceptions{
@@ -29,4 +33,12 @@ var InternalExceptions = internalExceptions{
 	ErrPasswordHashingFailed: errors.New("falha ao gerar o hash da senha"),
 
 	ErrJWTGenerationFailed: errors.New("falha ao gerar o JWT"),
+
+	ErrRedisConnectionFailure: errors.New("falha ao conectar com Redis"),
+
+	ErrRedisDisconnectionFailure: errors.New("falha ao desconectar o Redis"),
+
+	ErrRedisInsertionFailed: errors.New("falha ao inserir uma chave no Redis"),
+
+	ErrRedisDeletionFailed: errors.New("falha ao excluir uma chave no Redis"),
 }

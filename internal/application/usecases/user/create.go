@@ -12,11 +12,12 @@ import (
 )
 
 type UserCreationParams struct {
-	UserRepository interfaces.UserRepository
-	Payload        dto.UserCreationDTO
-	entity         entities.UserEntity
-	accessToken    string
-	refreshToken   string
+	UserRepository      interfaces.UserRepository
+	WhitelistRepository interfaces.WhitelistRepository
+	Payload             dto.UserCreationDTO
+	entity              entities.UserEntity
+	accessToken         string
+	refreshToken        string
 }
 
 type UserCreationResult struct {
@@ -27,6 +28,7 @@ type UserCreationResult struct {
 
 func Create(params UserCreationParams) (UserCreationResult, error) {
 	operations := []func() error{
+		params.checkIfTheCardNumberIsOnTheWhitelist,
 		params.handleValidations,
 		params.checkIfTheCardNumberIsAlreadyRegistered,
 		params.createEntity,
@@ -45,6 +47,17 @@ func Create(params UserCreationParams) (UserCreationResult, error) {
 		AccessToken:  params.accessToken,
 		RefreshToken: params.refreshToken,
 	}, nil
+}
+
+func (p *UserCreationParams) checkIfTheCardNumberIsOnTheWhitelist() error {
+	cardNumber := p.Payload.CardNumber
+	_, err := p.WhitelistRepository.Has(cardNumber)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (p *UserCreationParams) handleValidations() error {

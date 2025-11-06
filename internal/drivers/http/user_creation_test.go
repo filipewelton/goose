@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"retail_flow/internal/persistence/repositories"
 	sharedLib "retail_flow/internal/shared/lib"
 	"retail_flow/tests/generators"
 	"testing"
@@ -15,16 +16,19 @@ import (
 	"syreclabs.com/go/faker"
 )
 
-func TestUserCreation(t *testing.T) {
+func TestUserCreationRoute(t *testing.T) {
 	var guardian sharedLib.APIGuardian
 	var hash = faker.RandomString(64)
 
 	sharedLib.SetupEnvironmentVariables()
 
 	t.Run("when the user is successfully created", func(t *testing.T) {
+		whitelistRepository := repositories.RedisWhitelistRepository{}
 		cardNumber := faker.Number().Number(7)
 		name := faker.Name().Name()
 		password := generators.GeneratePassword()
+
+		whitelistRepository.Insert(cardNumber)
 
 		body := bytes.NewBufferString(fmt.Sprintf(`{
 			"cardNumber": "%s",

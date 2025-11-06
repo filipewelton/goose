@@ -11,6 +11,7 @@ import (
 )
 
 var userRepository = repositories.PostgresUserRepository{}
+var whitelistRepository = repositories.RedisWhitelistRepository{}
 
 func HandlerUserCreation(w http.ResponseWriter, r *http.Request) {
 	payload, err := lib.ParseRequestBody[dto.UserCreationDTO](r)
@@ -21,8 +22,9 @@ func HandlerUserCreation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	result, err := user.Create(user.UserCreationParams{
-		UserRepository: userRepository,
-		Payload:        payload,
+		UserRepository:      userRepository,
+		WhitelistRepository: whitelistRepository,
+		Payload:             payload,
 	})
 
 	if err != nil {
