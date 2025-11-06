@@ -8,3 +8,11 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+  cache:
+    container_name: retail_flow-cache
+    image: redis:7.4.7
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker/cache/redis.conf:/usr/local/etc/redis/redis.conf
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
