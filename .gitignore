@@ -1,0 +1,7 @@
+.vscode/
+bin/
+
+.env
+.env.development
+.env.test
+coverage.out
